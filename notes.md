@@ -1,3 +1,4 @@
+2017/09/19
 ## Big question
 * Are there Hamiltonian chordal graphs on fewer than 15 vertices which are not cycle extendable?
 
@@ -18,4 +19,15 @@
 
 
 #### Filter
-( n - 1 choose 2 ) + 1 edges : Any more and it is cycle extendable
+Edges
+* MAX: ( n - 1 choose 2 ) + 1 edges : Any more and it is cycle extendable
+* MIN: ( 2n - 3 ) edges
+
+
+Interval
+* Throw away interval graphs -> They are cycle extendable
+
+---
+2017/09/22
+
+**Theorem :** A graph is interval iff it is chordal and asteroidal triple free.
