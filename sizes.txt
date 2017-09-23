@@ -1,0 +1,25 @@
+Raw Biconnected Chordal
+14 vertices : 3,601,567,848
+13 vertices :   153,537,285
+12 vertices :     8,028,809
+11 vertices :       514,549
+10 vertices :        40,583
+ 9 vertices :         3,976
+ 8 vertices :           497
+ 7 vertices :            80
+
+Filtered Interval/Asteroidal
+12 vertices:      6,774,097
+11 vertices:        369,477
+10 vertices:         22,488
+ 9 vertices:          1,501
+ 8 vertices:            110
+ 7 vertices:              9
+
+ Hamiltonian Heuristic
+ 12 vertices:     1,762,403
+ 11 vertices:       102,694
+ 10 vertices:         6,472
+  9 vertices:           449
+  8 vertices:            31
+  7 vertices:             3

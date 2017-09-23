@@ -1,8 +1,0 @@
-chordal on 14 vertices : 3,601,567,848
-chordal on 13 vertices :   153,537,285
-chordal on 12 vertices :     8,028,809
-chordal on 11 vertices :       514,549
-chordal on 10 vertices :        40,583
-chordal on  9 vertices :         3,976
-chordal on  8 vertices :           497
-chordal on  7 vertices :            80
