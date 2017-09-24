@@ -16,10 +16,19 @@ Filtered Interval/Asteroidal
  8 vertices:            110
  7 vertices:              9
 
- Hamiltonian Heuristic
- 12 vertices:     1,762,403
- 11 vertices:       102,694
- 10 vertices:         6,472
-  9 vertices:           449
-  8 vertices:            31
-  7 vertices:             3
+Hamiltonian Heuristic
+12 vertices:      1,762,403
+11 vertices:        102,694
+10 vertices:          6,472
+ 9 vertices:            449
+ 8 vertices:             31
+ 7 vertices:              3
+
+Filtered Without Hamiltonian
+12 vertices:      5,011,694
+11 vertices:        266,783
+10 vertices:         16,016
+ 9 vertices:          1,052
+ 8 vertices:             79
+ 7 vertices:              6
+
