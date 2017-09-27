@@ -9,6 +9,7 @@ Raw Biconnected Chordal
  7 vertices :            80
 
 Filtered Interval/Asteroidal
+13 vertices:    141,965,757
 12 vertices:      6,774,097
 11 vertices:        369,477
 10 vertices:         22,488
