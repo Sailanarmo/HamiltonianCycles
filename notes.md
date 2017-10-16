@@ -31,3 +31,7 @@ Interval
 2017/09/22
 
 **Theorem :** A graph is interval iff it is chordal and asteroidal triple free.
+
+---
+2017/10/02
+
