@@ -1,16 +1,16 @@
 /*
  * C++ Program to Find Hamiltonian Cycle
  */
-#include <iostream>
+#include <chrono>
 #include <cstdio>
 #include <cstdlib>
+#include <fstream>
+#include <iostream>
 #include <sstream>
 #include <string>
-#include <fstream>
-#include <chrono>
+#include <vector>
 
 #define V 12
-
 
 void printSolution(int path[]);
 
@@ -82,25 +82,21 @@ bool hamCycle(bool graph[V][V])
 	 */
 int main ( int argc, char *argv[] )
 {
-	if (argc != 4)
+	if (argc != 2)
 	{
-		std::cout << "ham <vertex count> <input file> <output file>" << std::endl;
+		std::cout << "ham <output file>" << std::endl;
 		return EXIT_FAILURE;
 	}
 
-	std::cout << "verts:  " << argv[2] << std::endl;
-	std::cout << "input:  " << argv[2] << std::endl;
-	std::cout << "output: " << argv[3] << std::endl;
+	std::cout << "output: " << argv[2] << std::endl;
 
-	std::string infile(argv[2]);
-	std::string outfile(argv[3]);
-	std::ofstream output(infile);
+	std::ofstream output(argv[2]);
 	std::string row;
 	int poopmatrix[V][V];
 	bool realmatrix[V][V];
+	std::vector<bool> m;
 
 	std::chrono::duration<double> time;
-
 	auto start = std::chrono::high_resolution_clock::now();
 
 	while(std::getline(std::cin, row))
@@ -133,13 +129,12 @@ int main ( int argc, char *argv[] )
 			}
 			output << "\n";
 		}
-
 	}
 
 	auto end = std::chrono::high_resolution_clock::now();
-
 	time = end - start;
 
 	std::cout << "Computation took: " << time.count() << " Seconds." << std::endl;
+
 	return EXIT_SUCCESS;
 }
