@@ -27,7 +27,7 @@ bool isSafe(int v, bool graph[V][V], int path[], int pos)
     return true;
 }
  
-/* solve hamiltonian cycle problem */
+/* solve Hamiltonian cycle problem */
 bool hamCycleUtil(bool graph[V][V], int path[], int pos)
 {
     if (pos == V)
@@ -60,7 +60,7 @@ bool hamCycle(bool graph[V][V])
     path[0] = 0;
     if (hamCycleUtil(graph, path, 1) == false)
     {
-        std::cout<<"\nSolution does not exist"<< std::endl;
+        //std::cout<<"\nSolution does not exist"<< std::endl;
         return false;
     }
     //printSolution(path);
@@ -85,15 +85,15 @@ int main(int argc, char* argv[])
     
     if(argc != 2)
     {
-      std::cout << "ham <output file>" << std::endl;
+      std::cout << "ham.out <output file>" << std::endl;
       return EXIT_FAILURE;
     }
 
     std::ofstream output(argv[1]);
     std::string vert;
-    int poopmatrix[V][V];
+    int tempmatrix[V][V];
     bool realmatrix[V][V];
-    int hamGraphs = 0;
+    unsigned int hamGraphs = 0u;
 
     std::chrono::duration<double> time;
 
@@ -108,9 +108,9 @@ int main(int argc, char* argv[])
         //std::cout << vert << "     ";
         for(int j=0;j<V; ++j)
         {
-         if(vert[0] != 0 || vert[0] != 1) std::cerr;
-         poopmatrix[i][j] =(int)vert[j] - 48;
-         realmatrix[i][j] = (bool)poopmatrix[i][j];
+         //if(vert[0] != 0 || vert[0] != 1) std::cerr;
+         tempmatrix[i][j] =(int)vert[j] - 48;
+         realmatrix[i][j] = (bool)tempmatrix[i][j];
          //std::cout << realmatrix[i][j] << " ";
         }
         //std::cout << std::endl;
@@ -128,16 +128,18 @@ int main(int argc, char* argv[])
           }
           output << "\n";
         }
-        output << "\n";
+        output << std::endl;
       }
-      
     }
+
+    output.close();
 
     auto end = std::chrono::high_resolution_clock::now();
 
     time = end - start;
 
-    std::cout << "Computation took: " << time.count() << " Seconds." << std::endl;
+    std::cout << "Finished:\t" << argv[1] << '\n';
+    std::cout << "Computation took: " << time.count() << " Seconds.\n";
 	  std::cout << "Hamiltonian Graphs: " << hamGraphs << std::endl;
 
     return 0;

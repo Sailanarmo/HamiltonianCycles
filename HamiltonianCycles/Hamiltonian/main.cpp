@@ -10,7 +10,7 @@
 #include <string>
 #include <vector>
 
-#define V 12
+#define V 7
 
 void printSolution(int path[]);
 
@@ -60,7 +60,7 @@ bool hamCycle(bool graph[V][V])
 	path[0] = 0;
 	if (hamCycleUtil(graph, path, 1) == false)
 	{
-		//std::cout<<"\nSolution does not exist"<< std::endl;
+		std::cout<<"\nSolution does not exist"<< std::endl;
 		return false;
 	}
 	//printSolution(path);
@@ -88,9 +88,8 @@ int main ( int argc, char *argv[] )
 		return EXIT_FAILURE;
 	}
 
-	std::cout << "output: " << argv[2] << std::endl;
-
-	std::ofstream output(argv[2]);
+	int hamGraphs = 0;
+	std::ofstream output(argv[1]);
 	std::string row;
 	int poopmatrix[V][V];
 	bool realmatrix[V][V];
@@ -105,20 +104,22 @@ int main ( int argc, char *argv[] )
 		for(int i = 0; i < V; ++i)
 		{
 			std::getline(std::cin, row);
-			//std::cout << row << "     ";
+			std::cout << row << "     ";
 			for(int j = 0; j < V; ++j)
 			{
-				if(row[0] != 0 || row[0] != 1) std::cerr << "Oh no!\n\n";
+				if(row[0] != 0 || row[0] != 1) 
+					//std::cerr << "117: " << row[0] << " \n\n";
 				poopmatrix[i][j] =(int)row[j] - 48;
 				realmatrix[i][j] = (bool)poopmatrix[i][j];
-				//std::cout << realmatrix[i][j] << " ";
+				std::cout << realmatrix[i][j] << " ";
 			}
-			//std::cout << std::endl;
+			std::cout << "\n";
 		}
-		//std::cout << std::endl;
+		std::cout << "\n";
 
 		if(hamCycle(realmatrix) == true)
 		{
+			++hamGraphs;
 			for(int i = 0; i < V; ++i)
 			{
 				for (int j =0; j < V; ++j)
@@ -135,6 +136,7 @@ int main ( int argc, char *argv[] )
 	time = end - start;
 
 	std::cout << "Computation took: " << time.count() << " Seconds." << std::endl;
+	std::cout << "Hamiltonian Graphs: " << hamGraphs << std::endl;
 
 	return EXIT_SUCCESS;
 }
