@@ -6,6 +6,9 @@ DEBUG_FLAGS = -O0 -g3 -fsanitize=address
 RELEASE_FLAGS = -O3 -g0
 FLAGS = -std=c++14 -Wall -Wextra -Werror
 
+oldDebug: $(OBJS2)
+	$(CC) $(DEBUG_FLAGS) $(FLAGS) $(OBJS2) -o oldham.out
+
 old: $(OBJS2)
 	$(CC) $(RELEASE_FLAGS) $(FLAGS) $(OBJS2) -o oldham.out
 
