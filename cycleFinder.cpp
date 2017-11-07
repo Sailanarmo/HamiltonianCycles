@@ -1,7 +1,29 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <cmath>
 #include <cstdlib>
+#include <unordered_set>
+
+namespace std {
+  template <>
+  struct hash<std::unordered_set<int> >
+  {
+    //typedef Set      argument_type;
+
+    int operator()(const std::unordered_set<int> & s) const
+    {
+			int setHash=0;
+			for(auto &&e: s)
+			{
+				setHash+=pow(2,e); //check if this is implemeted with bitshift when powers of two, (likely is)
+			}
+				
+      return setHash;
+    }
+  };
+}
+
 
 void printAdj(std::vector<std::vector<bool> > G) 
 {
@@ -16,7 +38,7 @@ void printAdj(std::vector<std::vector<bool> > G)
 }
 
 //we use only the rows, and almost treat each row as an adjacency list, using the index of the vertex as the index
-void buildCycleList(std::vector<std::vector<bool> > G, std::vector<bool> visited, std::vector<std::vector<int> > &cycleList, int vy, int initialy, std::vector<int> path)
+void buildCycleList(std::vector<std::vector<bool> > G, std::vector<bool> visited, std::unordered_set<std::unordered_set<int> > &cycleList, int vy, int initialy, std::vector<int> path)
 {
 	visited[vy] = true;
 	visited[initialy] = false;
@@ -24,7 +46,7 @@ void buildCycleList(std::vector<std::vector<bool> > G, std::vector<bool> visited
 	if(vy == initialy && path.size() > 2)
 	{
 		path.push_back(vy); //add current vertex to our path through the graph
-		cycleList.push_back(path); //found a cycle, push it back
+		cycleList.insert(std::unordered_set<int>(path.begin(),path.end())); //found a cycle, add it to the set of sets
 		std::cout << "pushed cycle" << std::endl;
 		return; // Cycles can not continue through a visited vertex
 	}
@@ -37,7 +59,7 @@ void buildCycleList(std::vector<std::vector<bool> > G, std::vector<bool> visited
 		if(visited[i] != true && G[vy][i] == 1)
 		{
 			std::cout << "Going from " << vy << " to " << i << std::endl;
-			buildCycleList(G,visited,cycleList,i,initialy,path); //move to row of the next vertex and keep searching
+			buildCycleList(G,visited,cycleList,i,initialy,path); //move to row of the next vertex and keep searching recursively
 		}
 	}
 	std::cout << "exhausted adjacencies on " << vy << std::endl;
@@ -50,6 +72,7 @@ int main(int argc, char* argv[])
 	std::string file;
 	std::vector<std::vector<bool> > G;
 
+	//get arguments
 	if(argc != 3)
 	{	
 		std::cout << "Enter the number of vertices: ";
@@ -62,6 +85,8 @@ int main(int argc, char* argv[])
 		vertices = atoi(argv[1]);
 		file = argv[2];
 	}
+
+	//initialize parameters
 	G.resize(vertices);
 	for(auto &&v : G)
 	{
@@ -81,13 +106,18 @@ int main(int argc, char* argv[])
 		}
 	}
 
+	printAdj(G);
 
 	std::vector<bool> visited(vertices,0);
-	std::vector<std::vector<int> > cycleList;
+	std::unordered_set<std::unordered_set<int> > cycleList;
 	std::vector<int> path;
-	buildCycleList(G,visited,cycleList,0,0,path);
+	for(int i=0; i< vertices; ++i)
+	{
+		buildCycleList(G,visited,cycleList,i,i,path);
+	}
 
-
+	//print cycles
+  //std::unordered_set<std::unordered_set<int> > newList(cycleList.begin(),cycleList.end());
 	for(auto &&l: cycleList)
 	{
 		for(auto &&e: l)
