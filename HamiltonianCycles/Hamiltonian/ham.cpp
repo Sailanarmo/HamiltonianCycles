@@ -9,7 +9,7 @@
 #include <fstream>
 #include <chrono>
 
-#define V 2
+#define V 13
 
 
 void printSolution(int path[]);
@@ -84,20 +84,19 @@ bool hamCycle(bool graph[V][V])
 int main(int argc, char* argv[])
 {
 
-  if(argc != 2)
+  if(argc != 3)
   {
-    std::cout << "ham.out <output file>" << std::endl;
+    std::cout << "ham.out <source file> <output file>" << std::endl;
     return EXIT_FAILURE;
   }
 
-  std::cout << argv[1] << std::endl;
-
-  std::ofstream output(argv[1]);
-  std::string vert;
+  std::ofstream output(argv[2]);
+  std::ifstream g6file(argv[1]);
+  std::string vert, g6graph;
   bool m[V][V];
   unsigned int hamGraphs = 0u;
 
-  std::cout << "Starting: " << argv[1] << " on " << V << " vertices" << std::endl;
+  std::cout << "Starting: " << argv[1] << " --> " << argv[2] << " : " << V << " vertices" << std::endl;
 
   std::chrono::duration<double> time;
 
@@ -105,6 +104,7 @@ int main(int argc, char* argv[])
 
   while(std::getline(std::cin, vert))
   {
+    std::getline(g6file, g6graph);
     std::getline(std::cin,vert);
     for(int i=0; i< V; ++i)
     {
@@ -123,18 +123,19 @@ int main(int argc, char* argv[])
     if(hamCycle(m) == true)
     {
       ++hamGraphs;
-      for(int i = 0; i < V; ++i)
-      {
-        for (int j =0; j < V; ++j)
-        {
-          output << m[i][j] << ' ' ;
-          //std::cout << realmatrix[i][j] << " " ;
-        }
-        output << '\n';
-        //std::cout << "\n";
-      }
-      output << '\n';
-      //std::cout << std::endl;
+      output << g6graph << '\n';
+      //for(int i = 0; i < V; ++i)
+      //{
+      //  for (int j =0; j < V; ++j)
+      //  {
+      //    output << m[i][j] << ' ' ;
+      //    //std::cout << realmatrix[i][j] << " " ;
+      //  }
+      //  output << '\n';
+      //  //std::cout << "\n";
+      //}
+      //output << '\n';
+      ////std::cout << std::endl;
     }
   }
 
