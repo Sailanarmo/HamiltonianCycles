@@ -1,4 +1,4 @@
-//Is is suffucient to only attach our extended vertex to two of the members of a cycle?
+//Is is sufficient to only attach our extended vertex to two of the members of a cycle?
 //Since every cycle will have a maximum degree of two?
 
   while (std::cin >> G)
