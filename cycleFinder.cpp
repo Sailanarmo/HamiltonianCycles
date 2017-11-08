@@ -4,6 +4,7 @@
 #include <cmath> 
 #include <cstdlib>
 #include <unordered_set>
+#include <sstream>
 
 #define DEBUG 0
 //define std::hash for an unordered set
@@ -148,10 +149,12 @@ bool cycleExtends(std::unordered_set<int> cycle, std::unordered_set<std::unorder
 			//if(bitXOR & (bitXOR-1) == 0 && origCycleHash & hashSum == origCycleHash) 
 			if(pow2check == 0 ) 
 			{
+#if DEBUG
 				printCycle(c);
 				std::cout << " extends ";
 				printCycle(cycle);
 				std::cout << std::endl;
+#endif
 				return true;
 			}
 		}
@@ -173,6 +176,10 @@ bool graphExtends(std::unordered_set<std::unordered_set<int> > cycleList, int ve
 
 void runOnFile(int vertices, std::string file)
 {
+	std::stringstream ss;
+	ss << "nonExtendingOn" << vertices << ".txt";
+	std::ofstream outfile(ss.str());
+	
 	std::vector<std::vector<bool> > G;
 	//initialize parameters
 	G.resize(vertices);
@@ -181,35 +188,44 @@ void runOnFile(int vertices, std::string file)
 		v.resize(vertices);
 	}
 
+	std::string dummy;
 	std::ifstream fin;
 	fin.open(file);
-	
-	for(auto &&r : G)
-	{
-		for(auto &&c : r)
+	do{	
+		for(auto &&r : G)
 		{
-			int temp;
-			fin >> temp;   // read in as int and cast to bool, as std::cin does not support reading boolean from file
-			c = (bool)temp;
+			for(auto &&c : r)
+			{
+				int temp;
+				fin >> temp;   // read in as int and cast to bool, as std::cin does not support reading boolean from file
+				c = (bool)temp;
+			}
 		}
-	}
 
-	printAdj(G);
+		//printAdj(G);
 
-	std::vector<bool> visited(vertices,0);
-	std::unordered_set<std::unordered_set<int> > cycleList;
-	std::vector<int> path;
-	for(int i=0; i< vertices; ++i)
-	{
-		buildCycleList(G,visited,cycleList,i,i,path);
-	}
+		std::vector<bool> visited(vertices,0);
+		std::unordered_set<std::unordered_set<int> > cycleList;
+		std::vector<int> path;
+		for(int i=0; i< vertices; ++i)
+		{
+			buildCycleList(G,visited,cycleList,i,i,path);
+		}
 
-	if(graphExtends(cycleList,vertices)) std::cout << "G extends" << std::endl;
-	else 
-	{
-		std::cout << "G does not extend" << std::endl;
-		printAdj(G);
-	}
+		if(!graphExtends(cycleList,vertices))
+		{
+			for(auto &&r : G)
+			{
+				for(auto &&c : r)
+				{
+					outfile << c << " ";
+				}
+				outfile << "\n";
+			}
+			outfile << "\n";
+		}
+
+	}while(!fin.eof());
 }
 
 int main(int argc, char* argv[])
