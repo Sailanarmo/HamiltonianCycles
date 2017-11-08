@@ -106,8 +106,6 @@ void buildCycleList(std::vector<std::vector<bool> > G, std::vector<bool> visited
 
 }
 
-
-
 bool cycleExtends(std::unordered_set<int> cycle, std::unordered_set<std::unordered_set<int> > cycleList)
 {
 	//fancy bit level XOR AND here
@@ -132,11 +130,13 @@ bool cycleExtends(std::unordered_set<int> cycle, std::unordered_set<std::unorder
 		int bitXOR = origCycleHash ^ hashSum; // if results in power of two, good
 		int bitAND = origCycleHash & hashSum;
 		int pow2check = bitXOR & (bitXOR)-1;
+#if DEBUG
 		std::cout << "origCycleHash: " << origCycleHash << std::endl;
 		std::cout << "hashSum: " << hashSum << std::endl;
 		std::cout << "bitAND: " << bitAND << std::endl;
 		std::cout << "bitXOR: " << bitXOR << std::endl;
 		std::cout << "2-power check: " << pow2check << std::endl << std::endl;
+#endif
 
 		//a power of two will only have a single bit set, and so 1 less than that will have all lesser bits set to 1
 		//then if you AND it with the original, all bits should be different
@@ -145,12 +145,9 @@ bool cycleExtends(std::unordered_set<int> cycle, std::unordered_set<std::unorder
 		
 		if(bitAND == origCycleHash && cycle != c)
 		{
-			std::cout << hashSum << " contains all vertices of " << origCycleHash << std::endl;
-			std::cout << "XOR is " << bitXOR << std::endl;
 			//if(bitXOR & (bitXOR-1) == 0 && origCycleHash & hashSum == origCycleHash) 
 			if(pow2check == 0 ) 
 			{
-				std::cout << bitXOR << " is a power of two" << std::endl;
 				printCycle(c);
 				std::cout << " extends ";
 				printCycle(cycle);
@@ -171,29 +168,12 @@ bool graphExtends(std::unordered_set<std::unordered_set<int> > cycleList, int ve
 			return false; //found a cycle that does not extend, thus graph does not extend
 	}
 	return true; //All cycles extend
-
 }
 
-int main(int argc, char* argv[])
+
+void runOnFile(int vertices, std::string file)
 {
-	int vertices = 0;
-	std::string file;
 	std::vector<std::vector<bool> > G;
-
-	//get arguments
-	if(argc != 3)
-	{
-		std::cout << "Enter the number of vertices: ";
-		std::cin >> vertices;
-		std::cout << "Enter graph file: ";
-		std::cin >> file;
-	}
-	else
-	{
-		vertices = atoi(argv[1]);
-		file = argv[2];
-	}
-
 	//initialize parameters
 	G.resize(vertices);
 	for(auto &&v : G)
@@ -225,12 +205,32 @@ int main(int argc, char* argv[])
 	}
 
 	if(graphExtends(cycleList,vertices)) std::cout << "G extends" << std::endl;
-	else std::cout << "G does not extend" << std::endl;
+	else 
+	{
+		std::cout << "G does not extend" << std::endl;
+		printAdj(G);
+	}
+}
 
-	std::cout << std::endl;
-	printHashes(cycleList);
+int main(int argc, char* argv[])
+{
+	int vertices = 0;
+	std::string file;
 
-	std::cout << vertices << std::endl;
+	//get arguments
+	if(argc != 3)
+	{
+		std::cout << "Enter the number of vertices: ";
+		std::cin >> vertices;
+		std::cout << "Enter graph file: ";
+		std::cin >> file;
+	}
+	else
+	{
+		vertices = atoi(argv[1]);
+		file = argv[2];
+	}
 
+	runOnFile(vertices,file);
 
 }
