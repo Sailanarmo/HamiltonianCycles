@@ -3,10 +3,12 @@
 #include <fstream> 
 #include <cmath> 
 #include <cstdlib>
+#include <ctime>
 #include <unordered_set>
 #include <sstream>
 
 #define DEBUG 0
+#define TIME 0
 //define std::hash for an unordered set
 namespace std {
   template <>
@@ -207,10 +209,17 @@ void runOnFile(int vertices, std::string file)
 		std::vector<bool> visited(vertices,0);
 		std::unordered_set<std::unordered_set<int> > cycleList;
 		std::vector<int> path;
+	  std::vector<std::vector<bool> > tempG = G; //a temporary graph to remove vertices from without destroying the original information
 		for(int i=0; i< vertices; ++i)
 		{
-			buildCycleList(G,visited,cycleList,i,i,path);
+			buildCycleList(tempG,visited,cycleList,i,i,path);
+			//remove ith vertex connections here
+			for(auto&& v: tempG[i]) v = 0; //remove entire row of connections
+			for(int j=0; j<tempG.size(); ++j) tempG[j][i] = 0; //remove the column of connections
 		}
+#if DEBUG
+		std::cout << "BUILT CYCLES: " << cycleList.size();
+#endif
 
 		if(!graphExtends(cycleList,vertices))
 		{
@@ -246,7 +255,9 @@ int main(int argc, char* argv[])
 		vertices = atoi(argv[1]);
 		file = argv[2];
 	}
-
+	int start_s = clock();
 	runOnFile(vertices,file);
+	int stop_s = clock();
+	std::cout << "time: " << (stop_s-start_s)/double(CLOCKS_PER_SEC)*1000 << std::endl;
 
 }
