@@ -11,31 +11,31 @@
 #define TIME 0
 //define std::hash for an unordered set
 namespace std {
-  template <>
-  struct hash<std::unordered_set<int> >
-  {
-    int operator()(const std::unordered_set<int> & s) const
-    {
-			int setHash=0;
-			for(auto &&e: s)
+	template <>
+		struct hash<std::unordered_set<int> >
+		{
+			int operator()(const std::unordered_set<int> & s) const
 			{
-				setHash+=pow(2,e); //check if this is implemeted with bitshift when powers of two, (likely isnt)
+				int setHash=0;
+				for(auto &&e: s)
+				{
+					setHash+=pow(2,e); //check if this is implemeted with bitshift when powers of two, (likely isnt)
+				}
+
+				return setHash;
 			}
-				
-      return setHash;
-    }
-  };
+		};
 }
 
 
 void printCycle(std::unordered_set<int> cycle)
 {
-		std::cout << "{ ";
-		for(auto &&v: cycle)
-		{
-			std::cout << v << " ";
-		}
-		std::cout << "}";
+	std::cout << "{ ";
+	for(auto &&v: cycle)
+	{
+		std::cout << v << " ";
+	}
+	std::cout << "}";
 }
 
 void printHashes(std::unordered_set<std::unordered_set<int> > cycleList)
@@ -78,7 +78,7 @@ void buildCycleList(std::vector<std::vector<bool> > G, std::vector<bool> visited
 		std::cout << "2-path" << std::endl; 
 #endif
 		return;
-		}// 2-cycles are not acceptable
+	}// 2-cycles are not acceptable
 
 	if(vy == initialy && path.size() > 2)
 	{
@@ -97,24 +97,24 @@ void buildCycleList(std::vector<std::vector<bool> > G, std::vector<bool> visited
 	{
 		if(visited[i] != true && G[vy][i] == 1)
 		{
-			#if DEBUG
+#if DEBUG
 			std::cout << "Going from " << vy << " to " << i << std::endl;
-			#endif
+#endif
 			buildCycleList(G,visited,cycleList,i,initialy,path); //move to row of the next vertex and keep searching recursively
 		}
 	}
-	#if DEBUG
+#if DEBUG
 	std::cout << "exhausted adjacencies on " << vy << std::endl;
-	#endif
+#endif
 
 }
 
 bool cycleExtends(std::unordered_set<int> cycle, std::unordered_set<std::unordered_set<int> > cycleList)
 {
 	//fancy bit level XOR AND here
-	
+
 	int origCycleHash = 0;
-	
+
 	for(auto &&v: cycle)
 	{
 		origCycleHash += pow(2,v);
@@ -145,7 +145,7 @@ bool cycleExtends(std::unordered_set<int> cycle, std::unordered_set<std::unorder
 		//then if you AND it with the original, all bits should be different
 		//
 		//if the original cycle AND the possibly extending cycle result in the original cycle, it must have contain all the vertices of the original.
-		
+
 		if(bitAND == origCycleHash && cycle != c)
 		{
 			//if(bitXOR & (bitXOR-1) == 0 && origCycleHash & hashSum == origCycleHash) 
@@ -181,7 +181,7 @@ void runOnFile(int vertices, std::string file)
 	std::stringstream ss;
 	ss << "nonExtendingOn" << vertices << ".txt";
 	std::ofstream outfile(ss.str());
-	
+
 	std::vector<std::vector<bool> > G;
 	//initialize parameters
 	G.resize(vertices);
@@ -209,7 +209,7 @@ void runOnFile(int vertices, std::string file)
 		std::vector<bool> visited(vertices,0);
 		std::unordered_set<std::unordered_set<int> > cycleList;
 		std::vector<int> path;
-	  std::vector<std::vector<bool> > tempG = G; //a temporary graph to remove vertices from without destroying the original information
+		std::vector<std::vector<bool> > tempG = G; //a temporary graph to remove vertices from without destroying the original information
 		for(int i=0; i< vertices; ++i)
 		{
 			buildCycleList(tempG,visited,cycleList,i,i,path);
