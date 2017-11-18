@@ -33,3 +33,11 @@ Filtered Without Hamiltonian
  8 vertices:             79
  7 vertices:              6
 
+Hamiltonian Graphs
+13 vertices:      116,089,531
+12 vertices:        5,914,974
+11 vertices:          369,545
+10 vertices:           28,761
+ 9 vertices:            2,793
+ 8 vertices:              360
+ 7 vertices:               58
