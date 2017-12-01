@@ -19,7 +19,7 @@ namespace std {
 				int setHash=0;
 				for(auto &&e: s)
 				{
-					setHash+=pow(2,e); //check if this is implemeted with bitshift when powers of two, (likely isnt)
+					setHash+=pow(2,e); //check if this is implemented with bit shift when powers of two, (likely isn't)
 				}
 
 				return setHash;
@@ -92,7 +92,7 @@ void buildCycleList(std::vector<std::vector<bool> > G, std::vector<bool> visited
 
 	path.push_back(vy); //add current vertex to our path through the graph
 
-	//Go to each ajdacent vertex, as long as it is not visited in our path already
+	//Go to each adjacent vertex, as long as it is not visited in our path already
 	for(int i=0; i<G[vy].size(); ++i)
 	{
 		if(visited[i] != true && G[vy][i] == 1)
@@ -169,7 +169,7 @@ bool graphExtends(std::unordered_set<std::unordered_set<int> > cycleList, int ve
 {
 	for(auto &&c: cycleList)
 	{
-		if(c.size() < vertices && !cycleExtends(c,cycleList)) //dont check hamiltonian cycles (TODO:optimize for n < v-1 and n > 4)
+		if(c.size() < vertices && !cycleExtends(c,cycleList)) //don't check Hamiltonian cycles (TODO:optimize for n < v-1 and n > 4)
 			return false; //found a cycle that does not extend, thus graph does not extend
 	}
 	return true; //All cycles extend
@@ -199,7 +199,7 @@ void runOnFile(int vertices, std::string file)
 			for(auto &&c : r)
 			{
 				int temp;
-				fin >> temp;   // read in as int and cast to bool, as std::cin does not support reading boolean from file
+				fin >> temp;   // read in as int and cast to bool, as std::cin does not support reading Boolean from file
 				c = (bool)temp;
 			}
 		}
