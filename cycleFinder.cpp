@@ -1,7 +1,7 @@
 #include <vector>
-#include <iostream> 
-#include <fstream> 
-#include <cmath> 
+#include <iostream>
+#include <fstream>
+#include <cmath>
 #include <cstdlib>
 #include <ctime>
 #include <unordered_set>
@@ -55,7 +55,7 @@ void printHashes(std::unordered_set<std::unordered_set<int> > cycleList)
 	}
 }
 
-void printAdj(std::vector<std::vector<bool> > G) 
+void printAdj(std::vector<std::vector<bool> > G)
 {
 	for(auto &&r : G)
 	{
@@ -73,9 +73,9 @@ void buildCycleList(std::vector<std::vector<bool> > G, std::vector<bool> visited
 	visited[vy] = true;
 	visited[initialy] = false;
 	if(vy == initialy && path.size() <= 2 && path.size()>0)
-	{ 
+	{
 #if DEBUG
-		std::cout << "2-path" << std::endl; 
+		std::cout << "2-path" << std::endl;
 #endif
 		return;
 	}// 2-cycles are not acceptable
@@ -141,15 +141,15 @@ bool cycleExtends(std::unordered_set<int> cycle, std::unordered_set<std::unorder
 		std::cout << "2-power check: " << pow2check << std::endl << std::endl;
 #endif
 
-		//a power of two will only have a single bit set, and so 1 less than that will have all lesser bits set to 1
-		//then if you AND it with the original, all bits should be different
+		// a power of two will only have a single bit set, and so 1 less than that will have all lesser bits set to 1
+		// then if you AND it with the original, all bits should be different
 		//
-		//if the original cycle AND the possibly extending cycle result in the original cycle, it must have contain all the vertices of the original.
+		// if the original cycle AND the possibly extending cycle result in the original cycle, it must have contain all the vertices of the original.
 
 		if(bitAND == origCycleHash && cycle != c)
 		{
-			//if(bitXOR & (bitXOR-1) == 0 && origCycleHash & hashSum == origCycleHash) 
-			if(pow2check == 0 ) 
+			//if(bitXOR & (bitXOR-1) == 0 && origCycleHash & hashSum == origCycleHash)
+			if(pow2check == 0 )
 			{
 #if DEBUG
 				printCycle(c);
@@ -193,7 +193,7 @@ void runOnFile(int vertices, std::string file)
 	std::string dummy;
 	std::ifstream fin;
 	fin.open(file);
-	do{	
+	do{
 		for(auto &&r : G)
 		{
 			for(auto &&c : r)
