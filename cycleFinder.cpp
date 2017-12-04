@@ -3,37 +3,39 @@
 #include <fstream> 
 #include <cmath> 
 #include <cstdlib>
+#include <ctime>
 #include <unordered_set>
 #include <sstream>
 
 #define DEBUG 0
+#define TIME 0
 //define std::hash for an unordered set
 namespace std {
-  template <>
-  struct hash<std::unordered_set<int> >
-  {
-    int operator()(const std::unordered_set<int> & s) const
-    {
-			int setHash=0;
-			for(auto &&e: s)
+	template <>
+		struct hash<std::unordered_set<int> >
+		{
+			int operator()(const std::unordered_set<int> & s) const
 			{
-				setHash+=pow(2,e); //check if this is implemeted with bitshift when powers of two, (likely isnt)
+				int setHash=0;
+				for(auto &&e: s)
+				{
+					setHash+=pow(2,e); //check if this is implemeted with bitshift when powers of two, (likely isnt)
+				}
+
+				return setHash;
 			}
-				
-      return setHash;
-    }
-  };
+		};
 }
 
 
 void printCycle(std::unordered_set<int> cycle)
 {
-		std::cout << "{ ";
-		for(auto &&v: cycle)
-		{
-			std::cout << v << " ";
-		}
-		std::cout << "}";
+	std::cout << "{ ";
+	for(auto &&v: cycle)
+	{
+		std::cout << v << " ";
+	}
+	std::cout << "}";
 }
 
 void printHashes(std::unordered_set<std::unordered_set<int> > cycleList)
@@ -76,7 +78,7 @@ void buildCycleList(std::vector<std::vector<bool> > G, std::vector<bool> visited
 		std::cout << "2-path" << std::endl; 
 #endif
 		return;
-		}// 2-cycles are not acceptable
+	}// 2-cycles are not acceptable
 
 	if(vy == initialy && path.size() > 2)
 	{
@@ -95,24 +97,24 @@ void buildCycleList(std::vector<std::vector<bool> > G, std::vector<bool> visited
 	{
 		if(visited[i] != true && G[vy][i] == 1)
 		{
-			#if DEBUG
+#if DEBUG
 			std::cout << "Going from " << vy << " to " << i << std::endl;
-			#endif
+#endif
 			buildCycleList(G,visited,cycleList,i,initialy,path); //move to row of the next vertex and keep searching recursively
 		}
 	}
-	#if DEBUG
+#if DEBUG
 	std::cout << "exhausted adjacencies on " << vy << std::endl;
-	#endif
+#endif
 
 }
 
 bool cycleExtends(std::unordered_set<int> cycle, std::unordered_set<std::unordered_set<int> > cycleList)
 {
 	//fancy bit level XOR AND here
-	
+
 	int origCycleHash = 0;
-	
+
 	for(auto &&v: cycle)
 	{
 		origCycleHash += pow(2,v);
@@ -143,7 +145,7 @@ bool cycleExtends(std::unordered_set<int> cycle, std::unordered_set<std::unorder
 		//then if you AND it with the original, all bits should be different
 		//
 		//if the original cycle AND the possibly extending cycle result in the original cycle, it must have contain all the vertices of the original.
-		
+
 		if(bitAND == origCycleHash && cycle != c)
 		{
 			//if(bitXOR & (bitXOR-1) == 0 && origCycleHash & hashSum == origCycleHash) 
@@ -179,7 +181,7 @@ void runOnFile(int vertices, std::string file)
 	std::stringstream ss;
 	ss << "nonExtendingOn" << vertices << ".txt";
 	std::ofstream outfile(ss.str());
-	
+
 	std::vector<std::vector<bool> > G;
 	//initialize parameters
 	G.resize(vertices);
@@ -207,10 +209,17 @@ void runOnFile(int vertices, std::string file)
 		std::vector<bool> visited(vertices,0);
 		std::unordered_set<std::unordered_set<int> > cycleList;
 		std::vector<int> path;
+		std::vector<std::vector<bool> > tempG = G; //a temporary graph to remove vertices from without destroying the original information
 		for(int i=0; i< vertices; ++i)
 		{
-			buildCycleList(G,visited,cycleList,i,i,path);
+			buildCycleList(tempG,visited,cycleList,i,i,path);
+			//remove ith vertex connections here
+			for(auto&& v: tempG[i]) v = 0; //remove entire row of connections
+			for(int j=0; j<tempG.size(); ++j) tempG[j][i] = 0; //remove the column of connections
 		}
+#if DEBUG
+		std::cout << "BUILT CYCLES: " << cycleList.size();
+#endif
 
 		if(!graphExtends(cycleList,vertices))
 		{
@@ -246,7 +255,9 @@ int main(int argc, char* argv[])
 		vertices = atoi(argv[1]);
 		file = argv[2];
 	}
-
+	int start_s = clock();
 	runOnFile(vertices,file);
+	int stop_s = clock();
+	std::cout << "time: " << (stop_s-start_s)/double(CLOCKS_PER_SEC)*1000 << std::endl;
 
 }
