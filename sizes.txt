@@ -34,6 +34,7 @@ Filtered Without Hamiltonian
  7 vertices:              6
 
 Hamiltonian Graphs
+14 vertices:    2,816,695,796
 13 vertices:      116,089,531
 12 vertices:        5,914,974
 11 vertices:          369,545
