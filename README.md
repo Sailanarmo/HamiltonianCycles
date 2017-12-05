@@ -1,17 +1,17 @@
 <img src="/resources/Mathematics-Logo_BLUE.png">
 
-## Hamiltonian and Non-Extending Chordal Graphs
+# Hamiltonian and Non-Extending Chordal Graphs
 
 This repository is for a research group under the direction of <a href="http://www.math.usu.edu/people/davidbrown_facultypage.php">Dr. David Brown</a> and <a href="http://www.math.usu.edu/people/brent-thomas.php">Brent Thomas</a> at Utah State University. Our goal is to help ourselves and others analyze graphs for hamiltonicity and cycle extend-ability. We are using Dr. Brendan McKay's Nauty Software and Algorithms. All credit of the `nauty26r7` directory belongs solely to the work of Dr. Brendan McKay who's software can be found here: <a href="http://pallini.di.uniroma1.it/">nauty and Traces</a>.
 
-#### Hamiltonian Cycles and Hamiltonicity
+### Hamiltonian Cycles and Hamiltonicity
 `Hamiltonian/` contains resources for checking hamiltonicity in graphs. `ham.cpp` is used like:
 
 ```
 listg -a <source file.g6> | ham.out <source file.g6> <output file.g6>
 ```
 
-#### Cycles and Cycle Extend-ability
+### Cycles and Cycle Extend-ability
 
 `Extendable/` contains resources for checking cycle extend-ability in graphs. `cycleFinder.cpp` contains helper functions for `notExtendable` and `singleThread`.
 
