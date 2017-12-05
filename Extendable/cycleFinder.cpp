@@ -236,14 +236,10 @@ void process(int vertices, std::vector<Graph> graphs, std::ofstream& fout)
 {
   for (Graph g : graphs)
   {
-    std::cout << g << std::endl;
     if (notExtendable(vertices, g))
     {
-      std::cout << "Not Cycle Extendable" << std::endl;
       fout << g;
     }
-    else
-      std::cout << "Cycle Extendable" << std::endl;
   }
 }
 
@@ -257,10 +253,10 @@ std::vector<Graph> read(int vertices, std::string file)
   std::string dummy;
   std::ifstream fin;
   fin.open(file);
-  if(!fin)
+  if (!fin)
   {
     std::cout << "file not open" << std::endl;
-    return graphs;
+    exit(EXIT_FAILURE);
   }
   do
   {
