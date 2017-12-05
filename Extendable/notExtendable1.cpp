@@ -1,6 +1,9 @@
+#include "cycleFinder.cpp"
 #include "threadSafeQueue.hpp"
 #include <chrono>
+#include <fstream>
 #include <iostream>
+#include <string>
 #include <thread>
 #include <vector>
 
@@ -40,26 +43,60 @@ void feedQueue(TSQ<std::vector<Graph>>& queue, int vertices, int chunkSize)
       graphs.push_back(g);
     }
     queue.enqueue(graphs);
+    std::cout << "POST" << std::endl;
+  }
+}
+
+void processQueue(TSQ<std::vector<Graph>>& queue, int vertices, std::ofstream& fout)
+{
+  std::vector<Graph> graphs;
+  for (;;)
+  {
+    if (queue.dequeue(graphs))
+    {
+      std::cout << "processing" << std::endl;
+      process(vertices, graphs, fout);
+    }
+    else if (!queue.hasMore())
+    {
+      return;
+    }
   }
 }
 
 int main(int argc, char* argv[])
 {
-  int vertices = 0;
-
+  auto start = std::chrono::high_resolution_clock::now();
   // get arguments
-  if (argc != 2)
+  if (argc != 3)
   {
-    std::cout << "<vertices> /* get input from listg -Aq */" << std::endl;
+    std::cout << "<vertices> <chunk size> /* get input from listg -Aq */" << std::endl;
     return EXIT_FAILURE;
   }
-  vertices = atoi(argv[1]);
+  int vertices = atoi(argv[1]);
+  int chunkSize = atoi(argv[2]);
 
   TSQ<std::vector<Graph>> queue;
 
-  std::thread feeder([&]() { feedQueue(queue, vertices, 5); });
+  std::vector<std::thread> workers;
+
+  std::thread feeder([&]() { feedQueue(queue, vertices, chunkSize); });
+
+  auto n = std::thread::hardware_concurrency();
+  std::cout << n << " worker threads" << std::endl;
+
+  std::string file;
+  for (auto i = 0u; i < n; ++i)
+  {
+    file = "out" + std::to_string(i) + ".adj";
+    std::ofstream fout(file);
+    workers.emplace_back([&]() { processQueue(queue, vertices, fout); });
+  }
 
   feeder.join();
+  for (auto&& t : workers) t.join();
 
-  std::cout << queue.size() << " chunks on queue :D " << std::endl;
+  auto end = std::chrono::high_resolution_clock::now();
+  std::cout << std::chrono::duration<double, std::milli>(end - start).count()
+            << "milliseconds elapsed" << std::endl;
 }

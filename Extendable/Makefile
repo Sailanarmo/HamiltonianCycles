@@ -13,7 +13,7 @@ debug: $(OBJS)
 	$(CC) $(DEBUG_FLAGS) $(FLAGS) $(OBJS) -o debug.out
 
 ext: $(OBJS2)
-	g++ $(DEBUG_FLAGS) $(FLAGS) -pthread $(OBJS2) -o ext.out
+	g++ $(RELEASE_FLAGS) $(FLAGS) -pthread $(OBJS2) -o ext.out
 
 clean:
 	rm *.out

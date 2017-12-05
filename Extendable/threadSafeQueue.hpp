@@ -41,6 +41,7 @@ q.emplace_back(..args);
 
   int size() { return qsize; }
   void done() { more = false; }
+  bool hasMore() {return more;}
 
 private:
   std::atomic<int> qsize;
