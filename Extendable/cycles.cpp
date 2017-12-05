@@ -1,3 +1,6 @@
+#include "cycleFinder.cpp"
+#include <iostream>
+
 int main(int argc, char* argv[])
 {
   int vertices = 0;

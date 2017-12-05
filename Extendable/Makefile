@@ -1,4 +1,4 @@
-OBJS = cycleFinder.cpp 
+OBJS = cycles.cpp 
 OBJS2 = notExtendable1.cpp
 
 CC = g++
