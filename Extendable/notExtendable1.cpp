@@ -43,7 +43,7 @@ void feedQueue(TSQ<std::vector<Graph>>& queue, int vertices, int chunkSize)
       graphs.push_back(g);
     }
     queue.enqueue(graphs);
-    std::cout << "POST" << std::endl;
+    //std::cout << "POST" << std::endl;
   }
 }
 
@@ -54,7 +54,7 @@ void processQueue(TSQ<std::vector<Graph>>& queue, int vertices, std::ofstream& f
   {
     if (queue.dequeue(graphs))
     {
-      std::cout << "processing" << std::endl;
+      //std::cout << "processing" << std::endl;
       process(vertices, graphs, fout);
     }
     else if (!queue.hasMore())
