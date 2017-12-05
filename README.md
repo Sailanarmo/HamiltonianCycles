@@ -8,7 +8,7 @@ This repository is for a research group under the direction of <a href="http://w
 `Hamiltonian/` contains resources for checking hamiltonicity in graphs. `ham.cpp` is used like:
 
 ```
-listg -a &lt;source file.g6&gt; | ham.out &lt;source file.g6&gt; &lt;output file.g6&gt;
+listg -a <source file.g6> | ham.out <source file.g6> <output file.g6>
 ```
 
 #### Cycles and Cycle Extend-ability
@@ -18,11 +18,11 @@ listg -a &lt;source file.g6&gt; | ham.out &lt;source file.g6&gt; &lt;output file
 `cycles.cpp` is a program that will take an input file formatted as space separated adjacency matrices, where each adjacency matrix is set off from the others with a new line. The program will ask for the number of vertices and the file to read from. It can also be given these input parameters as command line arguments. The program cycles.out is used like:
 
 ```
-./cycles.out &lt;verticies&gt; &lt;output file.adj&gt;
+./cycles.out <verticies> <output file.adj>
 ```
 
 `notExtendable.cpp` is a multi threaded program that reads adjacency matrices produced from `listg -Aq` and writes the graphs that are **not** cycle extendable to a file. It will determine the number of concurrent threads supported by the system and search all the graphs fed to if from listg. The chunk size is the number of graphs that each thread will process at a time. The program notExtendable is used like:
 
 ```
-listg -Aq &lt;file.g6&gt; | ./notExtendable.out &lt;vertices&gt; &lt;chunk size&gt;
+listg -Aq <file.g6> | ./notExtendable.out <vertices> <chunk size>
 ```
