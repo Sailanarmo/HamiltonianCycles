@@ -250,7 +250,6 @@ std::vector<Graph> read(int vertices, std::string file)
   for (auto&& v : G) v.resize(vertices);
 
   std::vector<Graph> graphs;
-  std::string dummy;
   std::ifstream fin;
   fin.open(file);
   if (!fin)

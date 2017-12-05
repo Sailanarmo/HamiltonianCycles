@@ -1,4 +1,5 @@
 OBJS = cycleFinder.cpp 
+OBJS2 = notExtendable1.cpp
 
 CC = g++
 DEBUG_FLAGS = -O0 -g3 -fsanitize=address
@@ -10,6 +11,9 @@ release: $(OBJS)
 
 debug: $(OBJS)
 	$(CC) $(DEBUG_FLAGS) $(FLAGS) $(OBJS) -o debug.out
+
+ext: $(OBJS2)
+	g++ $(DEBUG_FLAGS) $(FLAGS) -pthread $(OBJS2) -o ext.out
 
 clean:
 	rm *.out
