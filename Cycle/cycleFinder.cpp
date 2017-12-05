@@ -25,6 +25,7 @@ std::ostream& operator<<(std::ostream& o, Graph g)
     o << "\n";
   }
   o << "\n";
+  return o;
 }
 
 // define std::hash for an unordered set
@@ -118,7 +119,7 @@ void buildCycleList(Graph G,
   path.push_back(vy); // add current vertex to our path through the graph
 
   // Go to each adjacent vertex, as long as it is not visited in our path already
-  for (int i = 0; i < G[vy].size(); ++i)
+  for (auto i = 0u; i < G[vy].size(); ++i)
   {
     if (visited[i] != true && G[vy][i] == 1)
     {
@@ -222,7 +223,7 @@ bool notExtendable(int vertices, Graph G)
     buildCycleList(tempG, visited, cycleList, i, i, path);
     // remove ith vertex connections here
     for (auto&& v : tempG[i]) v = 0; // remove entire row of connections
-    for (int j = 0; j < tempG.size(); ++j)
+    for (auto j = 0u; j < tempG.size(); ++j)
       tempG[j][i] = 0; // remove the column of connections
   }
 #if DEBUG
@@ -296,7 +297,7 @@ int main(int argc, char* argv[])
     vertices = atoi(argv[1]);
     file = argv[2];
   }
-  std::ofstream fout("test.out.g6");
+  std::ofstream fout("nonExtendable.g6");
   int start_s = clock();
   auto graphs = read(vertices, file);
   process(vertices, graphs, fout);
