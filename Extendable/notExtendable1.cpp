@@ -99,4 +99,5 @@ int main(int argc, char* argv[])
   auto end = std::chrono::high_resolution_clock::now();
   std::cout << std::chrono::duration<double, std::milli>(end - start).count()
             << "milliseconds elapsed" << std::endl;
+    return EXIT_SUCCESS;
 }
