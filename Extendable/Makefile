@@ -1,19 +1,22 @@
-OBJS = cycles.cpp 
-OBJS2 = notExtendable1.cpp
+OBJS1 = parallelDriver.cpp
+OBJS2 = serialDriver.cpp 
 
 CC = g++
 DEBUG_FLAGS = -O0 -g3 -fsanitize=address
 RELEASE_FLAGS = -O3 -g0
 FLAGS = -std=c++14 -Wall -Wextra
 
-release: $(OBJS)
-	$(CC) $(RELEASE_FLAGS) $(FLAGS) $(OBJS) -o cycle.out
+parallel: $(OBJS1)
+	g++ $(RELEASE_FLAGS) $(FLAGS) -pthread $(OBJS2) -o notExtendable.out
 
-debug: $(OBJS)
+parallelDebug: $(OBJS1)
 	$(CC) $(DEBUG_FLAGS) $(FLAGS) $(OBJS) -o debug.out
 
-ext: $(OBJS2)
-	g++ $(RELEASE_FLAGS) $(FLAGS) -pthread $(OBJS2) -o notExtendable.out
+serial: $(OBJS2)
+	$(CC) $(RELEASE_FLAGS) $(FLAGS) $(OBJS2) -o cycle.out
+
+serialDebug: $(OBJS2)
+	$(CC) $(DEBUG_FLAGS) $(FLAGS) $(OBJS2) -o debug.out
 
 clean:
 	rm *.out
