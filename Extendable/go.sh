@@ -5,7 +5,7 @@ if [ "$#" -ne 3 ]; then
   exit
 fi
 
-listg -Aq $1 | ./notExtendable.out $2 $3
+listg -Aq $1 | ./notExtendableParallel.out $2 $3
 cat out* > notExtendableOn$2.adj
 rm out*
 

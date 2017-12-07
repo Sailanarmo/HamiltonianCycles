@@ -7,19 +7,19 @@ RELEASE_FLAGS = -O3 -g0
 FLAGS = -std=c++14 -Wall -Wextra
 
 parallel: $(OBJS1)
-	g++ $(RELEASE_FLAGS) $(FLAGS) -pthread $(OBJS2) -o notExtendable.out
+	g++ $(RELEASE_FLAGS) $(FLAGS) -pthread $(OBJS2) -o notExtendableParallel.out
 
 parallelDebug: $(OBJS1)
-	$(CC) $(DEBUG_FLAGS) $(FLAGS) $(OBJS) -o debug.out
+	$(CC) $(DEBUG_FLAGS) $(FLAGS) $(OBJS) -o parallelDebug.out
 
 serial: $(OBJS2)
-	$(CC) $(RELEASE_FLAGS) $(FLAGS) $(OBJS2) -o cycle.out
+	$(CC) $(RELEASE_FLAGS) $(FLAGS) $(OBJS2) -o notExtendableSerial.out
 
 serialDebug: $(OBJS2)
-	$(CC) $(DEBUG_FLAGS) $(FLAGS) $(OBJS2) -o debug.out
+	$(CC) $(DEBUG_FLAGS) $(FLAGS) $(OBJS2) -o serialDebug.out
 
 clean:
 	rm *.out
 
 all: $(OBJS)
-	make release debug
+	make parallel serial
