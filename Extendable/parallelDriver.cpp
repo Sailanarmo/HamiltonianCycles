@@ -24,7 +24,7 @@ void feedQueue(TSQ<std::vector<Graph>>& queue, int vertices, int chunkSize)
     {
       if ((std::cin.eof()))
       {
-        std::cout << '\n' << "END OF STDIN" << std::endl;
+        std::cerr << '\n' << "END OF STDIN" << std::endl;
         if (graphs.size() != 0) queue.enqueue(graphs);
         queue.done();
         return;
@@ -43,20 +43,18 @@ void feedQueue(TSQ<std::vector<Graph>>& queue, int vertices, int chunkSize)
       graphs.push_back(g);
     }
     queue.enqueue(graphs);
-    // std::cout << "POST" << std::endl;
   }
 }
 
 void processQueue(TSQ<std::vector<Graph>>& queue, int vertices, std::string file, int id)
 {
   std::ofstream fout(file);
-  if (!fout) std::cout << id << " FILE NOT OPEN!" << std::endl;
+  if (!fout) std::cerr << id << " FILE NOT OPEN!" << std::endl;
   std::vector<Graph> graphs;
   for (;;)
   {
     if (queue.dequeue(graphs))
     {
-      std::cerr << id << " picked up " << graphs.size() << " graphs" << std::endl;
       process(vertices, graphs, fout);
     }
     else if (!queue.hasMore())
@@ -73,7 +71,7 @@ int main(int argc, char* argv[])
   // get arguments
   if (argc < 3)
   {
-    std::cout << "<vertices> <chunk size> [n threads] /* get input from listg -Aq */"
+    std::cerr << "<vertices> <chunk size> [n threads] /* get input from listg -Aq */"
               << std::endl;
     return EXIT_FAILURE;
   }
@@ -82,7 +80,7 @@ int main(int argc, char* argv[])
     n = atoi(argv[3]);
   else
     n = std::thread::hardware_concurrency();
-  std::cout << n << " worker threads" << std::endl;
+  std::cerr << n << " worker threads" << std::endl;
 
   static int vertices = atoi(argv[1]);
   static int chunkSize = atoi(argv[2]);
@@ -97,7 +95,8 @@ int main(int argc, char* argv[])
   {
     const std::string file = "out" + std::to_string(i) + ".adj";
     std::cerr << i << " " << file << std::endl;
-    //workers.push_back(std::thread([&queue, vertices, file, i]() { processQueue(queue, vertices, file, i); }));
+    // workers.push_back(std::thread([&queue, vertices, file, i]() { processQueue(queue,
+    // vertices, file, i); }));
     workers.emplace_back(processQueue, std::ref(queue), vertices, file, i);
   }
 
