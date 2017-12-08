@@ -238,6 +238,7 @@ void process(int vertices, std::vector<Graph> graphs, std::ofstream& fout)
   {
     if (notExtendable(vertices, g))
     {
+      //std::cout << "NOT Extendable" << std::endl;
       fout << g;
     }
   }
