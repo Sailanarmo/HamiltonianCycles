@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include <thread>
+#include <unist.h>
 #include <vector>
 
 using Graph = std::vector<std::vector<bool>>;
@@ -65,14 +66,25 @@ void processQueue(TSQ<std::vector<Graph>>& queue, int vertices, std::string file
   }
 }
 
+TSQ<std::vector<Graph>>* queuePointer;
+void signalHandler(int signum)
+{
+  std::cout << "Interrupt signal (" << signum << ") received.\n";
+
+  // cleanup and close up stuff here
+
+  // terminate program
+  exit(signum);
+}
+
 int main(int argc, char* argv[])
 {
+  signal(SIGINT, signalHandler); // setup signal handling
   auto start = std::chrono::high_resolution_clock::now();
   // get arguments
   if (argc < 3)
   {
-    std::cerr << "<vertices> <chunk size> [n threads] /* get input from listg -Aq */"
-              << std::endl;
+    std::cerr << "<vertices> <chunk size> [n threads] /* get input from listg -Aq */" << std::endl;
     return EXIT_FAILURE;
   }
   auto n = 0u;
@@ -86,6 +98,7 @@ int main(int argc, char* argv[])
   static int chunkSize = atoi(argv[2]);
 
   TSQ<std::vector<Graph>> queue;
+  queuePointer = &queue;
 
   std::vector<std::thread> workers;
 
