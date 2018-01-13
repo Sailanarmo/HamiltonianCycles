@@ -135,8 +135,8 @@ int main(int argc, char* argv[])
       exit(EXIT_FAILURE);
     }
 
-    maxQueueSize = args["m"].as<unsigned int>();
-    numThreads = args["t"].as<unsigned int>();
+    maxQueueSize = args["m"].as<int>();
+    numThreads = args["t"].as<int>();
   }
   catch (const cxxopts::OptionException& e)
   {
