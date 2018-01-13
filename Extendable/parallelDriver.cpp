@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 #include <thread>
-#include <unist.h>
+#include <csignal>
 #include <vector>
 
 using Graph = std::vector<std::vector<bool>>;
@@ -79,7 +79,7 @@ void signalHandler(int signum)
 
 int main(int argc, char* argv[])
 {
-  signal(SIGINT, signalHandler); // setup signal handling
+  std::signal(SIGINT, signalHandler); // setup signal handling
   auto start = std::chrono::high_resolution_clock::now();
   // get arguments
   if (argc < 3)
