@@ -1,11 +1,12 @@
+#include "cxxopts.hpp"
 #include "cycleFinder.cpp"
 #include "threadSafeQueue.hpp"
 #include <chrono>
+#include <csignal>
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <thread>
-#include <csignal>
 #include <vector>
 
 using Graph = std::vector<std::vector<bool>>;
@@ -79,23 +80,80 @@ void signalHandler(int signum)
 
 int main(int argc, char* argv[])
 {
-  std::signal(SIGINT, signalHandler); // setup signal handling
-  auto start = std::chrono::high_resolution_clock::now();
-  // get arguments
-  if (argc < 3)
-  {
-    std::cerr << "<vertices> <chunk size> [n threads] /* get input from listg -Aq */" << std::endl;
-    return EXIT_FAILURE;
-  }
-  auto n = 0u;
-  if (argc > 3)
-    n = atoi(argv[3]);
-  else
-    n = std::thread::hardware_concurrency();
-  std::cerr << n << " worker threads" << std::endl;
+  int maxQueueSize, numThreads;
+  static int vertices, chunkSize;
 
-  static int vertices = atoi(argv[1]);
-  static int chunkSize = atoi(argv[2]);
+  // BEGIN command line args
+  try
+  {
+    cxxopts::Options options(
+      argv[0],
+      "\nNot Extendable Parallel\nReads graphs in adjacency "
+      "matricies from stdin. Determines whether graphs are not they are cycle "
+      "extendable.\n\n");
+    options.positional_help("<verticies> <chunksize>");
+
+    // clang-format off
+    options.add_options()
+    ("h,help", "Print help")
+    ("m,maxsize", "limit the size of the queue of graphs", cxxopts::value<int>()->default_value(std::to_string(std::numeric_limits<int>::max())))
+    ("t,threads", "number of worker threads to process graphs", cxxopts::value<int>()->default_value(std::to_string(std::thread::hardware_concurrency())))
+    ("verticies", "number of verticies of the graphs being processed", cxxopts::value<int>())
+    ("chunksize", "number of graphs given to a thread at a time", cxxopts::value<int>())
+    ("rest","", cxxopts::value<std::vector<std::string>>())
+    ; // clang-format on
+
+    options.parse_positional({"verticies", "chunksize", "rest"});
+
+    auto args = options.parse(argc, argv);
+
+    if (args.count("help"))
+    {
+      std::cout << options.help() << std::endl;
+      exit(EXIT_SUCCESS);
+    }
+
+    if (args.count("verticies"))
+    {
+      vertices = args["verticies"].as<int>();
+    }
+    else
+    {
+      std::cout << "required: verticies\n";
+      std::cout << options.help() << std::endl;
+      exit(EXIT_FAILURE);
+    }
+
+    if (args.count("chunksize"))
+    {
+      chunkSize = args["chunksize"].as<int>();
+    }
+    else
+    {
+      std::cout << "required: chunksize\n";
+      std::cout << options.help() << std::endl;
+      exit(EXIT_FAILURE);
+    }
+
+    maxQueueSize = args["m"].as<unsigned int>();
+    numThreads = args["t"].as<unsigned int>();
+  }
+  catch (const cxxopts::OptionException& e)
+  {
+    std::cout << "error parsing options: " << e.what() << std::endl;
+    exit(EXIT_FAILURE);
+  } // END command line args
+
+  std::signal(SIGINT, signalHandler); // setup signal handling
+
+  /* display settings  */
+  std::cout << vertices << " vertices\n";
+  std::cout << numThreads << " worker threads\n";
+  std::cout << chunkSize << " graphs per chunk\n";
+  std::cout << maxQueueSize << " max queue size" << std::endl;
+
+  /* start timer */
+  auto start = std::chrono::high_resolution_clock::now();
 
   TSQ<std::vector<Graph>> queue;
   queuePointer = &queue;
@@ -104,7 +162,7 @@ int main(int argc, char* argv[])
 
   std::thread feeder([&]() { feedQueue(queue, vertices, chunkSize); });
 
-  for (auto i = 0u; i < n; ++i)
+  for (auto i = 0; i < numThreads; ++i)
   {
     const std::string file = "out" + std::to_string(i) + ".adj";
     std::cerr << i << " " << file << std::endl;
@@ -116,6 +174,7 @@ int main(int argc, char* argv[])
   feeder.join();
   for (auto&& t : workers) t.join();
 
+  /* end timer */
   auto end = std::chrono::high_resolution_clock::now();
   std::cout << std::chrono::duration<double, std::milli>(end - start).count()
             << "milliseconds elapsed" << std::endl;
