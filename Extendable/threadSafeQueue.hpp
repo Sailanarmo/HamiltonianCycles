@@ -8,7 +8,7 @@
 #include <thread>
 #include <limits>
 
-using namespace std::chrono_literals;
+using namespace std::chrono_literals; // allows 10s to be 10 std::chrono::seconds
 
 template <typename T>
 class TSQ
@@ -19,7 +19,7 @@ public:
   {
     while (qsize > maxsize)
     {
-      std::this_thread::sleep_for(5s);
+      std::this_thread::sleep_for(10s);
     }
 
     {
