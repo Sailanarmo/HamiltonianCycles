@@ -106,5 +106,7 @@ int main(int argc, char* argv[])
   auto end = std::chrono::high_resolution_clock::now();
   std::cout << std::chrono::duration<double, std::milli>(end - start).count()
             << "milliseconds elapsed" << std::endl;
+  std::string cmd ("~/endalert.sh " + std::to_string(vertices) + " &");
+  system(cmd.c_str());
   return EXIT_SUCCESS;
 }
