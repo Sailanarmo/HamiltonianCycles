@@ -126,13 +126,12 @@ void buildCycleList(Graph G,
 #if DEBUG
       std::cout << "Going from " << vy << " to " << i << std::endl;
 #endif
-      buildCycleList(
-        G,
-        visited,
-        cycleList,
-        i,
-        initialy,
-        path); // move to row of the next vertex and keep searching recursively
+      buildCycleList(G,
+                     visited,
+                     cycleList,
+                     i,
+                     initialy,
+                     path); // move to row of the next vertex and keep searching recursively
     }
   }
 #if DEBUG
@@ -199,7 +198,7 @@ bool cycleExtends(std::unordered_set<int> cycle,
   return false;
 }
 
-bool graphExtends(std::unordered_set<std::unordered_set<int>> cycleList, int vertices)
+bool graphExtends(std::unordered_set<std::unordered_set<int>> cycleList, unsigned int vertices)
 {
   for (auto&& c : cycleList)
   {
@@ -222,9 +221,8 @@ bool notExtendable(int vertices, Graph G)
   {
     buildCycleList(tempG, visited, cycleList, i, i, path);
     // remove ith vertex connections here
-    for (auto&& v : tempG[i]) v = 0; // remove entire row of connections
-    for (auto j = 0u; j < tempG.size(); ++j)
-      tempG[j][i] = 0; // remove the column of connections
+    for (auto&& v : tempG[i]) v = 0;                          // remove entire row of connections
+    for (auto j = 0u; j < tempG.size(); ++j) tempG[j][i] = 0; // remove the column of connections
   }
 #if DEBUG
   std::cout << "BUILT CYCLES: " << cycleList.size();
@@ -276,4 +274,3 @@ std::vector<Graph> read(int vertices, std::string file)
   } while (!fin.eof());
   return graphs;
 }
-
