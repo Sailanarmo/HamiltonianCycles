@@ -96,8 +96,10 @@ int main(int argc, char* argv[])
     // clang-format off
     options.add_options()
     ("h,help", "Print help")
-    ("m,maxsize", "limit the size of the queue of graphs", cxxopts::value<int>()->default_value(std::to_string(std::numeric_limits<int>::max())))
-    ("t,threads", "number of worker threads to process graphs", cxxopts::value<int>()->default_value(std::to_string(std::thread::hardware_concurrency())))
+    ("m,maxsize", "limit the size of the queue of graphs", cxxopts::value<int>()
+      ->default_value(std::to_string(std::numeric_limits<int>::max())))
+    ("t,threads", "number of worker threads to process graphs", cxxopts::value<int>()
+      ->default_value(std::to_string(std::thread::hardware_concurrency())))
     ("verticies", "number of verticies of the graphs being processed", cxxopts::value<int>())
     ("chunksize", "number of graphs given to a thread at a time", cxxopts::value<int>())
     ("rest","", cxxopts::value<std::vector<std::string>>())
@@ -150,12 +152,12 @@ int main(int argc, char* argv[])
   std::cout << vertices << " vertices\n";
   std::cout << numThreads << " worker threads\n";
   std::cout << chunkSize << " graphs per chunk\n";
-  std::cout << maxQueueSize << " max queue size" << std::endl;
+  std::cout << maxQueueSize << " max queue size\n" << std::endl;
 
   /* start timer */
   auto start = std::chrono::high_resolution_clock::now();
 
-  TSQ<std::vector<Graph>> queue;
+  TSQ<std::vector<Graph>> queue(maxQueueSize);
   queuePointer = &queue;
 
   std::vector<std::thread> workers;

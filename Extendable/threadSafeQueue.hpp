@@ -14,7 +14,7 @@ template <typename T>
 class TSQ
 {
 public:
-  TSQ(int maxs = std::numeric_limits<int>::max()) : qsize(0), more(true), maxsize(maxs) {}
+  TSQ(int maxs) : qsize(0), more(true), maxsize(maxs) {}
   void enqueue(T t)
   {
     while (qsize > maxsize)
